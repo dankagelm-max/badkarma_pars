@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Контакты — Bad Karma</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #0b120b;
+  --card: #141f14;
+  --accent: #4ade80;
+  --accent-dim: rgba(74, 222, 128, 0.2);
+  --text: #e5e7eb;
+  --muted: #9ca3af;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+a { color: var(--accent); }
+.container {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 2.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+header.site-header {
+  background: rgba(11, 18, 11, 0.92);
+  border-bottom: 1px solid var(--accent-dim);
+  padding: 0.9rem 1.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #fff;
+  text-decoration: none;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.logo span { color: var(--accent); }
+nav.site-nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.nav-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.85rem;
+  border-radius: 50px;
+  transition: color .2s, background .2s;
+}
+.nav-link:hover { color: #fff; }
+.nav-link.active {
+  color: #0b120b;
+  background: var(--accent);
+  font-weight: 600;
+}
+/* ---------- Панель «Обо мне» ---------- */
+.about-panel {
+  position: sticky;
+  top: 88px;              /* ниже шапки — верх больше не прячется */
+  align-self: start;
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 16px;
+  padding: 1.6rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;    /* центрирование содержимого */
+  text-align: center;
+}
+.about-panel > * { width: 100%; }
+.avatar-wrap {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #1a331a;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  border: 2px solid var(--accent-dim);
+}
+.avatar-wrap img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  opacity: 0;
+}
+.avatar-wrap img.loaded { opacity: 1; }
+.avatar-letter {
+  font-family: 'Caveat', cursive;
+  font-size: 3rem;
+  color: var(--accent);
+  z-index: 1;
+}
+.about-panel h3 { color: #fff; font-size: 1.1rem; margin-bottom: 0.5rem; }
+.about-panel p { color: var(--muted); font-size: 0.88rem; }
+.about-divider {
+  height: 1px;
+  background: var(--accent-dim);
+  margin: 1.2rem 0;
+}
+.stats-widget h3 { color: #fff; margin-bottom: 0.8rem; }
+.stats-row {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+.stats-row span { color: var(--accent); font-weight: 700; font-size: 1.05rem; }
+.script-status {
+  margin-top: 0.9rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+}
+.dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+  animation: pulse 1.6s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+/* ---------- Контент ---------- */
+section { margin-bottom: 3rem; }
+h1, h2 { color: #fff; margin-bottom: 1rem; }
+h2 { font-size: 1.7rem; }
+.card {
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 16px;
+  padding: 1.5rem;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.2rem;
+}
+.btn {
+  display: inline-block;
+  background: var(--accent);
+  color: #0b120b;
+  font-weight: 700;
+  text-decoration: none;
+  padding: 0.8rem 1.6rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.95rem;
+  transition: transform .2s, box-shadow .2s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px var(--accent-dim); }
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+}
+.more-link { display: inline-block; margin-top: 1rem; color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+.more-link:hover { text-decoration: underline; }
+.honest-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+.honest-card {
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 14px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.honest-card .icon { font-size: 1.6rem; flex-shrink: 0; }
+.honest-card p { margin: 0; font-size: 0.88rem; }
+.honest-card.no { border-color: rgba(248, 113, 113, 0.3); }
+.hero p.lead { color: var(--muted); font-size: 1.05rem; max-width: 640px; }
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1.1em;
+  background: var(--accent);
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.note-entry {
+  background: var(--card);
+  border: 1px solid var(--accent-dim);
+  border-radius: 14px;
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+}
+.note-entry .note-date { color: var(--accent); font-family: 'Caveat', cursive; font-size: 1.3rem; }
+.note-entry p { color: var(--muted); font-size: 0.92rem; margin-top: 0.4rem; }
+form.contact-form { display: flex; flex-direction: column; gap: 0.9rem; max-width: 480px; }
+form.contact-form input,
+form.contact-form textarea {
+  background: #0f180f;
+  border: 1px solid var(--accent-dim);
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+form.contact-form input:focus,
+form.contact-form textarea:focus { outline: 1px solid var(--accent); }
+footer.site-footer {
+  border-top: 1px solid var(--accent-dim);
+  text-align: center;
+  padding: 1.5rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+@media (max-width: 760px) {
+  .container { grid-template-columns: 1fr; }
+  .about-panel { position: static; order: -1; }
+  .honest-cards { grid-template-columns: 1fr; }
+}
+</style>
+
+</head>
+<body>
+<header class="site-header">
+  <a class="logo" href="index.html">BAD<span> KARMA</span></a>
+  <nav class="site-nav">
+<a class="nav-link" href="index.html">Главная</a>
+<a class="nav-link" href="services.html">Услуги</a>
+<a class="nav-link" href="approach.html">Подход</a>
+<a class="nav-link" href="portfolio.html">Портфолио</a>
+<a class="nav-link" href="notes.html">Заметки</a>
+<a class="nav-link active" href="contacts.html">Контакты</a>
+
+  </nav>
+</header>
+<div class="container">
+  <main>
+
+    <section>
+      <h1>Контакты</h1>
+      <p class="lead" style="color:var(--muted);">Напишите — отвечаю лично, без ботов и автоответчиков. Обычно в течение дня.</p>
+    </section>
+
+    <section>
+      <h2>Прямые связи</h2>
+      <div class="card">
+        <p>✉️ Почта: <a href="mailto:dankagelm@yandex.by">dankagelm@yandex.by</a></p>
+        <p>💬 Telegram: <a href="https://t.me/bad_karma">@bad_karma</a></p>
+        <p>📞 Телефон: по запросу — напишите сначала на почту или в Telegram.</p>
+      </div>
+    </section>
+
+    <section>
+      <h2>Написать сообщение</h2>
+      <div class="card">
+        <form class="contact-form" action="https://formsubmit.co/dankagelm@yandex.by" method="POST">
+          <input type="text" name="name" placeholder="Ваше имя" required>
+          <input type="email" name="email" placeholder="Ваш email" required>
+          <textarea name="message" rows="5" placeholder="Опишите задачу: что за данные, откуда, в каком формате нужен результат" required></textarea>
+          <input type="hidden" name="_subject" value="Заявка с сайта Bad Karma">
+          <input type="hidden" name="_captcha" value="false">
+          <button class="btn" type="submit">Отправить</button>
+        </form>
+        <p style="color:var(--muted); font-size:0.8rem; margin-top:1rem;">После публикации сайта подтвердите адрес в письме от FormSubmit — заявки начнут приходить на почту.</p>
+      </div>
+    </section>
+
+  </main>
+  <aside class="about-panel">
+    <div class="avatar-wrap">
+      <img src="avatar.jpg" alt="Ира" onload="this.classList.add('loaded')">
+      <span class="avatar-letter">И</span>
+    </div>
+    <h3>Обо мне</h3>
+    <p><strong id="age-display">32 года</strong>, финансовая сфера.<br>
+    Автоматизирую сбор данных и отчёты. Скрипт собирает — я проверяю вручную, чтобы в файле не было сюрпризов.</p>
+    <div class="about-divider"></div>
+    <p style="font-size:0.8rem;">Работаю открыто: тестовая выборка до оплаты.</p>
+
+  </aside>
+</div>
+<footer class="site-footer">
+  <p>© <span id="year">2026</span> Bad Karma · Ирина · <a href="contacts.html">Связаться</a></p>
+</footer>
+<script>
+// Автоматический возраст
+(function () {
+  var birth = new Date(1994, 2, 7);
+  var today = new Date();
+  var age = today.getFullYear() - birth.getFullYear();
+  var m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  var n10 = age % 10, n100 = age % 100;
+  var word = 'лет';
+  if (n10 === 1 && n100 !== 11) word = 'год';
+  else if (n10 >= 2 && n10 <= 4 && (n100 < 12 || n100 > 14)) word = 'года';
+  var el = document.getElementById('age-display');
+  if (el) el.textContent = age + ' ' + word;
+  var y = document.getElementById('year');
+  if (y) y.textContent = today.getFullYear();
+})();
+
+</script>
+</body>
+</html>
